@@ -13,7 +13,7 @@ export default class SearchConsole extends React.Component<any, ISearchConsoleSt
 
     constructor(props: any) {
         super(props);
-        this.state = {};
+        this.state = { isSearching: false };
         this.search = this.search.bind(this);
     }
 
@@ -32,7 +32,7 @@ export default class SearchConsole extends React.Component<any, ISearchConsoleSt
         }
     }
 
-    async search(queryText: string) {
+    search(queryText: string) {
         if (queryText === "") {
             return;
         }
@@ -51,11 +51,10 @@ export default class SearchConsole extends React.Component<any, ISearchConsoleSt
     render() {
         const items = this.state ? (this.state.items || []) : [];
         return <div>
-
             {!this.state.errorMessage && this.state.isSearching ?
                 <div>מחפש...</div> : ""
             }
-            {this.state.isSearching === false &&
+            {!this.state.isSearching &&
              this.state.items && this.state.items.length === 0 ?
                 <div>לא נמצאו תוצאות.</div> : ""
             }

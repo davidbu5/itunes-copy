@@ -11,10 +11,11 @@ export function getServer() {
 
     app.use(helmet());
 
-    // configure app
+    // configure handling body of requests
     app.use(bodyParser.urlencoded({ extended: false }));
     app.use(bodyParser.json({ limit: '2mb' }));
 
+    // enable cross-origin requests
     app.use((req, res, next) => {
         res.setHeader('Access-Control-Allow-Origin', '*');
         res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');

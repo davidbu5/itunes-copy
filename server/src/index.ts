@@ -2,21 +2,24 @@ import { getServer } from './modules/server';
 import { DBConnection } from './modules/db';
 
 // require environment variables
-const dotenv = require('dotenv');
-dotenv.config();
+require('dotenv').config();
 
-DBConnection.ConnectToDB();
+const connection = new DBConnection();
+connection.connectToDB().then(() => {
 
-const server = getServer();
+    const server = getServer();
 
-server.on('close', () => {
-    DBConnection.DisconnectFromDB();
-});
-server.on('error', err => {
-    console.error('server got an unexpected error.');
-    console.error(err);
-});
+    server.on('close', () => {
+        connection.disconnectFromDB();
+    });
+    server.on('error', err => {
+        console.error('server got an unexpected error.');
+        console.error(err);
+    });
 
-// start listening
-const port = process.env.PORT || 80;
-server.listen(port, () => console.log(`server is listening on port ${port}.`));
+    // start listening
+    const port = 80;
+    server.listen(port, () => console.log(`server is listening on port ${port}.`));
+    
+}).catch(err => console.log(err));
+

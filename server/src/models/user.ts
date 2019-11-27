@@ -22,13 +22,4 @@ const userSchema: Schema = new Schema({
     }]
 });
 
-userSchema.pre('save', async function(next) {
-    // Hash the password before saving the user model
-    const user = this as IUser;
-    if (user.isModified('password')) {
-        user.password = await bcrypt.hash(user.password, 8);
-    }
-    next();
-})
-
 export default mongoose.model<IUser>('User', userSchema);

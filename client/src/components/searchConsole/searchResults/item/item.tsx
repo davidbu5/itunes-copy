@@ -14,15 +14,14 @@ export interface IItemProps {
 
 export default class Item extends React.Component<IItemProps> {
     render() {
-        const linkToDeatils = {
-            pathname: `/result/${this.props.itunesItem.trackId}`,
-            state: this.props.itunesItem
-        };
         return <div>
             <li>
-                <Link to={linkToDeatils}>
+                <Link to={{
+                    pathname: `/result/${this.props.itunesItem.trackId}`,
+                    state: this.props.itunesItem
+                }}>
                     <div>{this.props.itunesItem.trackName}</div>
-                    <div>By: {this.props.itunesItem.artistName}</div>
+                    <div>מבצע: {this.props.itunesItem.artistName}</div>
                 </Link>
             </li>
         </div>;

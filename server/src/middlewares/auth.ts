@@ -2,6 +2,8 @@
 import * as jwt from 'jsonwebtoken';
 import { UserRepo } from '../repos/user';
 
+const userRepo = new UserRepo();
+
 const auth = async (req, res, next) => {
     if (!req.header('Authorization')) {
         return res.status(401).send({ error: 'Not authorized to access this resource' });
@@ -9,9 +11,9 @@ const auth = async (req, res, next) => {
     const token = req.header('Authorization').replace('Bearer ', '');
     const data = jwt.verify(token, process.env.JWT_KEY);
     try {
-        const user = await UserRepo.FindByIdAndToken(data._id, token);
+        const user = await userRepo.FindByUserIdAndToken(data._id, token);
         if (!user) {
-            throw new Error();
+            res.status(401).send({ error: 'Not authorized to access this resource' });
         }
         req.user = user;
         req.token = token;

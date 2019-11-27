@@ -4,15 +4,14 @@ import QueryModel from "../models/query";
 
 export class QueryRepo {
 
-    static async Create(query: IQueryModel): Promise<any> {
+    async Create(query: IQueryModel): Promise<void> {
         const queryDocument = new QueryModel(query);
-        const createdQuery = await queryDocument.save();
-        return createdQuery.toObject();
+        await queryDocument.save();
     }
 
-    static async GetTopTenOfUser(userName: string): Promise<IQuery[]> {
+    async GetTopTenOfUser(userName: string): Promise<IQuery[]> {
         const query = [
-            { $match: { userName: userName } },
+            { $match: { userName } },
             {
                 $group: {
                     _id: "$queryText",

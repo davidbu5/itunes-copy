@@ -11,7 +11,7 @@ export default class SearchBox extends React.Component<any, { input: string }> {
 
     handleSearch(event: React.FormEvent) {
         event.preventDefault();
-        this.props.onSearch(this.state.input)
+        this.props.onSearch(this.state.input);
     }
 
     handleTextboxChange(event: any) {

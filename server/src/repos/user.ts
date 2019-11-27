@@ -6,16 +6,18 @@ import UserModel from "../models/user";
 
 export class UserRepo {
 
-    static async Create(user: IUserModel): Promise<IUser> {
+    async Create(user: IUserModel): Promise<IUser> {
         const userDocument = new UserModel(user);
+        // Hash the password before saving the user model
+        userDocument.password = await bcrypt.hash(user.password, 8);
         return await userDocument.save();
     }
 
-    static async FindByIdAndToken(id: string, token: string): Promise<IUser> {
+    async FindByUserIdAndToken(id: string, token: string): Promise<IUser> {
         return await UserModel.findOne({ _id: id, 'tokens.token': token }).exec();
     }
 
-    static async FindByCredentials(userName: string, password: string): Promise<IUser> {
+    async FindByCredentials(userName: string, password: string): Promise<IUser> {
         // Search for a user by email and password.
         const user = await UserModel.findOne({ userName });
         if (!user) {
@@ -28,8 +30,8 @@ export class UserRepo {
         return user;
     }
 
-    static async GenerateAuthToken(user: IUser): Promise<string> {
-        const token = jwt.sign({ _id: user._id }, process.env.JWT_KEY)
+    async GenerateAuthToken(user: IUser): Promise<string> {
+        const token = jwt.sign({ _id: user._id }, process.env.JWT_KEY);
         user.tokens = user.tokens.concat({ token });
         await user.save();
         return token;

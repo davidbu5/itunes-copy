@@ -11,7 +11,7 @@ export default class Logout extends React.Component<any, any> {
         } else {
             this.state = {};
             const url = `http://localhost/user/logout`;
-            axios.post(url, this.state).then(response => {
+            axios.post(url).then(response => {
                 delete axios.defaults.headers.Authorization;
                 this.props.history.push('/');
             }).catch(err => {

@@ -2,16 +2,12 @@ import * as mongoose from 'mongoose';
 
 export class DBConnection {
 
-    static async ConnectToDB() {
+    async connectToDB() {
         const dbName = 'itunesSearch';
-        await mongoose.connect(`mongodb://127.0.0.1:27017/${dbName}`, { 
-            useNewUrlParser: true,
-            useCreateIndex: true,
-            useFindAndModify: false
-        } as any);
+        await mongoose.connect(`mongodb://127.0.0.1:27017/${dbName}`);
     }
 
-    static async DisconnectFromDB() {
+    async disconnectFromDB() {
         if (mongoose.connection.readyState === 1) {
             await mongoose.disconnect();
         }
