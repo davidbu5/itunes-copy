@@ -3,51 +3,65 @@ import SearchBox from '../searchBox/searchBox';
 import SearchResults from './searchResults/searchResults';
 import axios from 'axios';
 
-export default class SearchConsole extends React.Component<any, { items?: any, queryText?: string, errorMessage?: string }> {
+interface ISearchConsoleState {
+    items?: any;
+    errorMessage?: string;
+    isSearching?: boolean;
+};
+
+export default class SearchConsole extends React.Component<any, ISearchConsoleState> {
 
     constructor(props: any) {
         super(props);
+        this.state = {};
+        this.search = this.search.bind(this);
+    }
 
-        this.handleSearch = this.handleSearch.bind(this);
-
-        const queryText = props.match.params.queryText;
-        if (!queryText) {
-            return;
-        }
-
+    componentDidMount() {
         if (!axios.defaults.headers.Authorization) {
             const errorMessage = "אינכם מחוברים לחשבון.";
-            this.state = { errorMessage };
+            this.setState({ errorMessage });
         }
         else {
-            this.state = { items: [], queryText };
+            const queryText = this.props.match.params.queryText;
+            this.setState({ items: [], errorMessage: "" });
+            if (!queryText) {
+                return;
+            }
             this.search(queryText);
         }
     }
 
-    handleSearch(queryText: string) {
+    async search(queryText: string) {
         if (queryText === "") {
             return;
         }
 
         this.props.history.push(`/search/${queryText}?`);
-
-        this.search(queryText);
-    }
-
-    async search(queryText: string) {
+        this.setState({ isSearching: true, errorMessage: "" });
         const url = `http://localhost/search?queryText=${queryText.replace(' ', '+')}`;
-        const response: any = await axios.get(url);
-
-        this.setState({ items: response.data.results, queryText });
+        axios.get(url).then((response) => {
+            this.setState({ items: response.data.results, isSearching: false, errorMessage: "" });
+        }).catch(() => {
+            const errorMessage = "חלה שגיאה בחיפוש. נא נסו שנית מאוחר יותר.";
+            this.setState({ items: [], isSearching: false, errorMessage });
+        });
     }
 
     render() {
         const items = this.state ? (this.state.items || []) : [];
         return <div>
+
+            {!this.state.errorMessage && this.state.isSearching ?
+                <div>מחפש...</div> : ""
+            }
+            {this.state.isSearching === false &&
+             this.state.items && this.state.items.length === 0 ?
+                <div>לא נמצאו תוצאות.</div> : ""
+            }
             {this.state.errorMessage ? <div>{this.state.errorMessage}</div> :
                 <div>
-                    <SearchBox onSearch={this.handleSearch}></SearchBox>
+                    <SearchBox onSearch={this.search}></SearchBox>
                     <SearchResults items={items} ></SearchResults>
                 </div>}
         </div>;

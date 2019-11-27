@@ -5,7 +5,6 @@ import { Switch, Route } from 'react-router';
 import Result from './components/result/result';
 import Signin from './components/signin/signin';
 import Login from './components/login/login';
-import Home from './components/home/home';
 import Header from './components/header/header';
 import TopTenSearches from './components/top10/top10';
 import Logout from './components/logout/logout';
@@ -18,7 +17,7 @@ function App() {
       </div>
       <main>
         <Switch>
-          <Route exact path="/" component={Home} />
+          <Route exact path="/" component={SearchConsole} />
           <Route path="/signin" component={Signin} />
           <Route path="/login" component={Login} />
           <Route path="/logout" component={Logout} />
