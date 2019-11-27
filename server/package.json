@@ -1,0 +1,38 @@
+{
+  "name": "itunes-server",
+  "version": "1.0.0",
+  "description": "search itunes",
+  "main": "Server.js",
+  "scripts": {
+    "start": "set JWT_KEY=ITunesSearchProject && ts-node src/index",
+    "build": "webpack",
+    "watch": "webpack --watch"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.19.0",
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.18.3",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.16.3",
+    "helmet": "^3.13.0",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.7.12",
+    "request": "^2.88.0",
+    "validator": "^12.1.0"
+  },
+  "devDependencies": {
+    "@types/express": "^4.16.0",
+    "@types/helmet": "0.0.38",
+    "@types/mongoose": "^5.5.32",
+    "@types/node": "^12.12.12",
+    "env-cmd": "^10.0.1",
+    "ts-loader": "^5.3.0",
+    "ts-node": "^7.0.1",
+    "typescript": "^3.0.3",
+    "webpack": "^4.23.1",
+    "webpack-cli": "^3.1.2"
+  }
+}
